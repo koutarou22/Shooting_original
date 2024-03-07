@@ -26,6 +26,7 @@ public:
 	void MoveDown();
 	void Update() override;
 	void Draw() override;
+	void Reset();
 
 	
 	Bullet* GetGun() { return gun_; }

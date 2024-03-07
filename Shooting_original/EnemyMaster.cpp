@@ -3,7 +3,6 @@
 #include "Enemy.h"
 #include <algorithm>
 
-
 void EnemyMaster::SetEnemiesRect()
 {
 	float xmin = Scene::Width(), xmax = 0;
@@ -26,8 +25,6 @@ void EnemyMaster::SetEnemiesRect()
 	Vec2 adjustVal = { ENEMY_CHR_SIZE / 2, ENEMY_CHR_SIZE / 2 };
 	rect_ = { {Vec2{xmin, ymin} - adjustVal}, xmax - xmin + ENEMY_CHR_SIZE, ymax - ymin + ENEMY_CHR_SIZE };
 }
-
-
 
 EnemyMaster::EnemyMaster()
 	:BasicAbility(), timer_(ENEMY_SHOT_INTERVAL)
@@ -75,7 +72,46 @@ void EnemyMaster::InitializeEnemies()
 	SetEnemiesRect(); //全体枠自体の更新
 	moveDir_ = { 1.0, 0.0 };//全体枠の移動方向も、エネミー個体と同じ
 
+}
 
+void EnemyMaster::Reset()
+{
+	//前回の敵たちを消す
+	for (auto& enemy : enemies) {
+		delete enemy;
+	}
+	enemies.clear();
+
+	// 新しい敵(同じコード)を追加(よくない)
+	for (int j = 0; j < EnemyLines; j++)
+	{
+		for (int i = 0; i < EnemyInLine; i++)
+		{
+			Enemy* e = new Enemy;
+			enemies.push_back(e);
+		}
+	}
+
+	const int W_MARGIN{ ENEMY_CHR_SIZE / 3 };
+	const int H_MARGIN{ ENEMY_CHR_SIZE / 10 };
+	const int CENTER = Scene::Width() / 4;
+
+	for (int j = 0; j < EnemyLines; j++) {
+		for (int i = 0; i < EnemyInLine; i++) {
+			enemies[j * EnemyInLine + i]->speed_ = ENEMY_MOVE_SPEED;
+			enemies[j * EnemyInLine + i]->pos_
+				= Vec2{ i * (ENEMY_CHR_SIZE + H_MARGIN), j * (ENEMY_CHR_SIZE + W_MARGIN) }
+			+ Vec2{ ENEMY_CHR_SIZE, ENEMY_CHR_SIZE } / 2 + Vec2{ CENTER, ENEMY_CHR_SIZE };
+			enemies[j * EnemyInLine + i]->isAlive_ = true;
+			enemies[j * EnemyInLine + i]->tex_ = TextureAsset(U"ENEMY");
+			enemies[j * EnemyInLine + i]->moveDir_ = { 1.0, 0.0 };
+			enemies[j * EnemyInLine + i]->SetCharaRect(Size{ ENEMY_CHR_SIZE, ENEMY_CHR_SIZE });
+		}
+	}
+
+	speed_ = ENEMY_MOVE_SPEED; //全体枠の移動スピードも、エネミー個体と同じ
+	SetEnemiesRect(); //全体枠自体の更新
+	moveDir_ = { 1.0, 0.0 };//全体枠の移動方向も、エネミー個体と同じ
 
 }
 
@@ -113,7 +149,6 @@ void EnemyMaster::Update()
 		timer_.Update();
 
 }
-
 
 void EnemyMaster::Draw()
 {

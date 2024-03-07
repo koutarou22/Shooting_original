@@ -35,6 +35,23 @@ void Player::Initialize()
 	}
 }
 
+void Player::Reset()
+{
+	
+	Vec2 chrMargin{ 0, Scene::Height() / 2 - PLAYER_CHR_SIZE };
+	pos_ = Scene::Center() + chrMargin;
+	speed_ = PLAYER_MOVE_SPEED;
+	tex_ = TextureAsset(U"PLAYER");
+	SetCharaRect(SizeF{ PLAYER_RECT_SIZE,PLAYER_RECT_SIZE });
+	moveDir_ = { 0, 0 };
+	isAlive_ = true;
+
+    for (auto& bullet : Gun_)
+	{
+		bullet->DeActivateMe();
+	}
+}
+
 direction Player::GetDirection()
 {
 	if ((KeyUp | KeyW).pressed())
@@ -95,7 +112,7 @@ void Player::Draw()
 {
 	if (isAlive_) {
 		tex_.resized(PLAYER_CHR_SIZE).drawAt(pos_);
-		rect_.drawFrame(1, 1, Palette::Red);
+		//rect_.drawFrame(1, 1, Palette::Red);
 
 		for (auto& theI : Gun_) {
 			theI->Draw();

@@ -30,6 +30,7 @@ public:
 	direction GetDirection();
 	void Update() override;
 	void Draw() override;
+	void Reset();
 	
 	vector<Bullet*> GetGunBullet() { return Gun_; }
 	

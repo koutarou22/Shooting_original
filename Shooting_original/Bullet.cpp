@@ -69,6 +69,6 @@ void Bullet::Draw()
 {
 	if (isAlive_) {
 		tex_.resized(renderSize_).drawAt(pos_);
-		rect_.drawFrame(1, 1, Palette::Red);
+		/*rect_.drawFrame(1, 1, Palette::Red);*/
 	}
 }

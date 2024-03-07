@@ -22,6 +22,7 @@ public:
 	void InitializeEnemies();
 	void Update() override; 
 	void Draw() override;
+	void Reset();
 
 };
 

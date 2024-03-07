@@ -36,6 +36,16 @@ Enemy::Enemy()
 	gun_->SetMoveDir(ENEMY_BULLET_DIR);
 }
 
+void Enemy::Reset()
+{
+	pos_ = Scene::Center();
+	speed_ = ENEMY_MOVE_SPEED;
+	moveDir_ = { 1, 0 };
+	isAlive_ = true;
+	gun_->DeActivateMe();
+}
+
+
 void Enemy::Shot()
 {
 	if (gun_->isActive() == false)
